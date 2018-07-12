@@ -1,3 +1,15 @@
+class Name {
+  String first;
+  String last;
+
+  toString() {
+    return first + ' ' + last;
+  }
+
+  Name({this.first, this.last});
+}
+
 class UserData {
-  String
+  int userID;
+  Name name;
 }
