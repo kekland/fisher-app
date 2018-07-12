@@ -1,4 +1,5 @@
 import 'package:fisher/classes/news_data.dart';
+import 'package:fisher/pages/image_carousel_page.dart';
 import 'package:fisher/pages/profile_page.dart';
 import 'package:fisher/utils.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,18 @@ class NewsWidget extends StatelessWidget {
   NewsWidget(this.data, this.onLikeTap);
 
   onProfileTap(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userData: data.author)));
+  }
+
+  openCarousel(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => ProfilePage(userData: data.author))
+      MaterialPageRoute(
+        builder: (context) {
+          return ImageCarouselNetworkPage(
+            urls: data.imageURL,
+          );
+        },
+      ),
     );
   }
 
@@ -69,6 +80,20 @@ class NewsWidget extends StatelessWidget {
                   fontSize: 16.0,
                 ),
               ),
+            ),
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: data.imageURL.map((String url) {
+                return InkWell(
+                  onTap: () => openCarousel(context),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                    child: Image.network(url, height: 200.0),
+                  ),
+                );
+              }).toList(),
             ),
           ),
           Divider(height: 1.0),

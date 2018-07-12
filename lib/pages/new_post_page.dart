@@ -4,6 +4,7 @@ import 'package:fisher/pages/image_carousel_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,17 +34,25 @@ class _NewPostPageState extends State<NewPostPage> {
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(width: 24.0),
-                  Text('Publishing your cool post :P'),
+                  Text('Publishing your cool post'),
                 ],
               ),
             );
           });
       try {
         FirebaseDatabase database = FirebaseDatabase.instance;
+        FirebaseStorage storage = FirebaseStorage.instance;
         FirebaseAuth auth = FirebaseAuth.instance;
         String uid = (await auth.currentUser()).uid;
         DatabaseReference newsReference = database.reference().child('users/$uid/posts').push();
         DatabaseReference newsCountReference = database.reference().child('users/$uid/posts/count');
+
+        if (images.length > 0) {
+          for (File image in images) {
+            UploadTaskSnapshot snapshot = await storage.ref().child('images').putFile(image).future;
+            await newsReference.push().set(snapshot.downloadUrl.toString());
+          }
+        }
 
         await newsReference.child('body').set(bodyController.text);
         await newsReference.child('likes').set(1);
@@ -57,13 +66,10 @@ class _NewPostPageState extends State<NewPostPage> {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
       } catch (e) {
-        scaffold.currentState.showSnackBar(SnackBar(content: Text('Error occurred during registration'), duration: Duration(seconds: 2)));
+        scaffold.currentState.showSnackBar(SnackBar(content: Text('Error occurred during posting'), duration: Duration(seconds: 2)));
         Navigator.of(context).pop();
       }
-    }
-    else {
-
-    }
+    } else {}
   }
 
   List<File> images = [];

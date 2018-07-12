@@ -51,3 +51,52 @@ class _ImageCarouselPageState extends State<ImageCarouselPage> {
     );
   }
 }
+
+class ImageCarouselNetworkPage extends StatefulWidget {
+  final List<String> urls;
+  ImageCarouselNetworkPage({this.urls});
+  @override
+  _ImageCarouselPageNetworkState createState() => _ImageCarouselPageNetworkState();
+}
+
+class _ImageCarouselPageNetworkState extends State<ImageCarouselNetworkPage> {
+  back(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Container(
+              color: Colors.black,
+              child: Center(
+                child: ImageCarousel(
+                  widget.urls
+                      .map((String url) {
+                        return NetworkImage(url);
+                      })
+                      .toList()
+                      .cast<ImageProvider>(),
+                  canCloseZoomOnTap: true,
+                  fit: BoxFit.fitWidth,
+                  height: double.infinity,
+                ),
+              ),
+            ),
+            Align(
+              alignment: AlignmentDirectional.topStart,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => back(context),
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
