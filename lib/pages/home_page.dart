@@ -1,3 +1,4 @@
+import 'package:fisher/pages/news_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -7,12 +8,8 @@ class HomePage extends StatefulWidget {
 
 int selectedPage = 0;
 List bodyPages = [
-  Container(
-    color: Colors.red,
-  ),
-  Container(
-    color: Colors.blue,
-  ),
+  NewsPage(),
+  Container(),
 ];
 
 class _HomePageState extends State<HomePage> {
@@ -73,6 +70,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () => print('Adding photo'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: bodyPages[selectedPage],
     );
   }
 }

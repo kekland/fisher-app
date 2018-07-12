@@ -12,4 +12,16 @@ class Name {
 class UserData {
   int userID;
   Name name;
+  String city;
+
+  UserData({this.userID, this.name, this.city});
+}
+
+class UserAdditionalData {
+  int postsCount;
+  int subscribersCount;
+  int likesCount;
+  bool isSubscribed;
+
+  UserAdditionalData({this.postsCount, this.subscribersCount, this.likesCount, this.isSubscribed});
 }
