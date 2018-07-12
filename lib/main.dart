@@ -1,5 +1,6 @@
 import 'package:fisher/classes/user_data.dart';
 import 'package:fisher/pages/home_page.dart';
+import 'package:fisher/pages/new_post_page.dart';
 import 'package:fisher/pages/profile_page.dart';
 import 'package:fisher/pages/registration_page.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
       ),
       home: new RegistrationPage(),
+      routes: {
+        '/home': (context) => HomePage(),
+        '/registration': (context) => RegistrationPage(),
+        '/new_post': (context) => NewPostPage(),
+      },
     );
   }
 }

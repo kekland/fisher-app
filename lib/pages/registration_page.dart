@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -7,14 +8,68 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  onRegisterTap() {
-    final FirebaseAuth auth = FirebaseAuth.instance;
+  TextEditingController emailController;
+  TextEditingController passwordController;
+  TextEditingController nameController;
+  TextEditingController cityController;
+  GlobalKey<ScaffoldState> scaffold = new GlobalKey();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseDatabase database = FirebaseDatabase.instance;
 
+  initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    nameController = TextEditingController();
+    cityController = TextEditingController();
+  }
+
+  onRegisterTap(BuildContext context) async {
+    if (emailController.text.length == 0 || nameController.text.length == 0 || cityController.text.length == 0) {
+      scaffold.currentState.showSnackBar(SnackBar(content: Text('All fields must be filled')));
+    } else if (passwordController.text.length < 6) {
+      scaffold.currentState.showSnackBar(SnackBar(content: Text('Your password is too short')));
+    } else {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Please, wait'),
+              content: Row(
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(width: 12.0),
+                  Text('Registration in progress'),
+                ],
+              ),
+            );
+          });
+      try {
+        FirebaseUser user = await auth.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+
+        DatabaseReference thisUserReference = database.reference().child('users').push();
+
+        await thisUserReference.child('name').set(nameController.text);
+        await thisUserReference.child('city').set(cityController.text);
+        await thisUserReference.child('email').set(emailController.text);
+        await thisUserReference.child('uid').set(user.uid);
+
+        Navigator.of(context).pop();
+        Navigator.of(context).pushReplacementNamed('/home');
+      } catch (e) {
+        scaffold.currentState.showSnackBar(SnackBar(content: Text('Error occurred during registration'), duration: Duration(seconds: 2)));
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffold,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -48,6 +103,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         icon: Icon(Icons.email),
                         labelText: 'E-Mail',
                       ),
+                      controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                     ),
                     TextField(
@@ -55,6 +111,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         icon: Icon(Icons.lock),
                         labelText: 'Password',
                       ),
+                      controller: passwordController,
                       obscureText: true,
                     ),
                     TextField(
@@ -62,12 +119,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         icon: Icon(Icons.account_circle),
                         labelText: 'Name',
                       ),
+                      controller: nameController,
                     ),
                     TextField(
                       decoration: InputDecoration(
                         icon: Icon(Icons.location_city),
                         labelText: 'City or country',
                       ),
+                      controller: cityController,
                     ),
                     SizedBox(height: 24.0),
                     SizedBox(
@@ -75,7 +134,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       child: RaisedButton.icon(
                         color: Colors.lightGreen,
                         textColor: Colors.white,
-                        onPressed: () {},
+                        onPressed: () => onRegisterTap(context),
                         icon: Icon(Icons.chevron_right),
                         label: Text('Register'),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),

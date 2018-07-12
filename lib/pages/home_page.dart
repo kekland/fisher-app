@@ -19,12 +19,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  openNewPost(BuildContext context) {
+    Navigator.of(context).pushNamed('/new_post');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          (selectedPage == 0)? 'Feed' : 'Map',
+          (selectedPage == 0) ? 'Feed' : 'Map',
         ),
         actions: [
           IconButton(
@@ -50,14 +54,14 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 icon: Icon(
                   Icons.map,
-                  color: (selectedPage == 1)? Colors.black : Colors.black54,
+                  color: (selectedPage == 1) ? Colors.black : Colors.black54,
                 ),
                 onPressed: () => selectPage(1),
               ),
               IconButton(
                 icon: Icon(
                   Icons.home,
-                  color: (selectedPage == 0)? Colors.black : Colors.black54,
+                  color: (selectedPage == 0) ? Colors.black : Colors.black54,
                 ),
                 onPressed: () => selectPage(0),
               ),
@@ -67,7 +71,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add_a_photo),
-        onPressed: () => print('Adding photo'),
+        onPressed: () => openNewPost(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: bodyPages[selectedPage],
