@@ -10,7 +10,7 @@ class NewsWidget extends StatelessWidget {
 
   onProfileTap(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => ProfilePage(data: data.author))
+      MaterialPageRoute(builder: (context) => ProfilePage(userData: data.author))
     );
   }
 

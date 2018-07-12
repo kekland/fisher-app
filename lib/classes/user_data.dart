@@ -20,8 +20,8 @@ class UserData {
 class UserAdditionalData {
   int postsCount;
   int subscribersCount;
-  int likesCount;
+  int subscribedCount;
   bool isSubscribed;
 
-  UserAdditionalData({this.postsCount, this.subscribersCount, this.likesCount, this.isSubscribed});
+  UserAdditionalData({this.postsCount, this.subscribersCount, this.subscribedCount, this.isSubscribed});
 }

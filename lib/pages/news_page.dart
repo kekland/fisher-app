@@ -41,14 +41,15 @@ class _NewsPageState extends State<NewsPage> {
       String name = (await userReference.child('name').once()).value;
       receivedNewsData.forEach((id, data) {
         if (id != 'count') {
+          var liked_by = data['liked_by'];
           newsData.add(
             new NewsData(
               author: UserData(userID: uid, city: city, name: Name(first: name, last: '')),
               body: data['body'],
               postID: id,
               publishTime: DateTime.fromMillisecondsSinceEpoch(data['timestamp']),
-              likeCount: data['likes'],
-              liked: ((data['liked_by'] as Map).containsKey(user.uid)),
+              likeCount: (liked_by != null) ? (liked_by as Map).keys.length : 0,
+              liked: (liked_by != null) ? (liked_by as Map).containsKey(user.uid) : false,
             ),
           );
         }
@@ -73,14 +74,8 @@ class _NewsPageState extends State<NewsPage> {
       DatabaseReference post = database.reference().child('users/${news[index].author.userID}/posts/${news[index].postID}');
       String uid = (await auth.currentUser()).uid;
       if (news[index].liked) {
-        DatabaseReference likes = post.child('likes');
-        int likesBefore = (await likes.once()).value;
-        likes.set(likesBefore + 1);
         await post.child('liked_by/$uid').set(true);
       } else {
-        DatabaseReference likes = post.child('likes');
-        int likesBefore = (await likes.once()).value;
-        likes.set(likesBefore - 1);
         await post.child('liked_by/$uid').remove();
       }
     } catch (e) {
