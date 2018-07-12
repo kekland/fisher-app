@@ -10,7 +10,7 @@ class Name {
 }
 
 class UserData {
-  int userID;
+  String userID;
   Name name;
   String city;
 

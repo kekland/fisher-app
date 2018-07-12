@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 class Utils {
   static String dateTimeToString(DateTime dateTime) {
     DateTime today = DateTime.now();
-    var formatter = new DateFormat('H:m');
+    var formatter = new DateFormat('H:mm');
 
     if (dateTime.day == today.day && dateTime.month == today.month && dateTime.year == today.year) {
       return 'Today at ${formatter.format(dateTime)}';

@@ -5,6 +5,7 @@ class NewsData {
   DateTime publishTime;
 
   String body;
+  String postID;
   List<String> imageURL;
 
   bool liked;
@@ -12,6 +13,7 @@ class NewsData {
 
   NewsData({
     this.author,
+    this.postID,
     this.body,
     this.imageURL,
     this.publishTime,

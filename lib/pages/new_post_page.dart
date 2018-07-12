@@ -44,6 +44,7 @@ class _NewPostPageState extends State<NewPostPage> {
         await newsReference.child('body').set(bodyController.text);
         await newsReference.child('likes').set(1);
         await newsReference.child('liked_by').child(uid).set(true);
+        await newsReference.child('timestamp').set(DateTime.now().millisecondsSinceEpoch);
 
         await newsCountReference.runTransaction((MutableData a) async {
           await newsCountReference.set(a.value + 1);

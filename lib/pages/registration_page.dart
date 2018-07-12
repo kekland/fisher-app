@@ -57,7 +57,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         await thisUserReference.child('name').set(nameController.text);
         await thisUserReference.child('city').set(cityController.text);
         await thisUserReference.child('email').set(emailController.text);
-        await thisUserReference.child('subscribers').child('count').set(0);
+        await thisUserReference.child('subscribers').child('count').set(1);
         await thisUserReference.child('subscribers').child(user.uid).set(true);
         await thisUserReference.child('subscribed').child('count').set(1);
         await thisUserReference.child('subscribed').child(user.uid).set(true);
@@ -73,8 +73,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
+  checkLogin(BuildContext context) async {
+    if ((await auth.currentUser()) != null) {
+      Navigator.of(context).pushReplacementNamed('/home');
+    }
+  }
+
+  bool checkedLogin = false;
   @override
   Widget build(BuildContext context) {
+    if (!checkedLogin) {
+      checkLogin(context);
+      checkedLogin = true;
+    }
     return Scaffold(
       key: scaffold,
       body: Container(
