@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -39,8 +40,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
               content: Row(
                 children: [
                   CircularProgressIndicator(),
-                  SizedBox(width: 12.0),
-                  Text('Registration in progress'),
+                  SizedBox(width: 24.0),
+                  Text('Creating account for you'),
                 ],
               ),
             );
@@ -51,17 +52,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
           password: passwordController.text,
         );
 
-        DatabaseReference thisUserReference = database.reference().child('users').push();
+        DatabaseReference thisUserReference = database.reference().child('users').child(user.uid);
 
         await thisUserReference.child('name').set(nameController.text);
         await thisUserReference.child('city').set(cityController.text);
         await thisUserReference.child('email').set(emailController.text);
-        await thisUserReference.child('uid').set(user.uid);
+        await thisUserReference.child('subscribers').child('count').set(0);
+        await thisUserReference.child('subscribers').child(user.uid).set(true);
+        await thisUserReference.child('subscribed').child('count').set(1);
+        await thisUserReference.child('subscribed').child(user.uid).set(true);
+        await thisUserReference.child('posts').child('count').set(0);
+        await thisUserReference.child('likes').set(0);
 
         Navigator.of(context).pop();
         Navigator.of(context).pushReplacementNamed('/home');
       } catch (e) {
         scaffold.currentState.showSnackBar(SnackBar(content: Text('Error occurred during registration'), duration: Duration(seconds: 2)));
+        Navigator.of(context).pop();
       }
     }
   }

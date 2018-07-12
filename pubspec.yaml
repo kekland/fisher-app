@@ -11,6 +11,7 @@ dependencies:
   intl:
   firebase_database:
   firebase_auth:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:
