@@ -42,10 +42,12 @@ class _NewsPageState extends State<NewsPage> {
       receivedNewsData.forEach((id, data) {
         if (id != 'count') {
           var liked_by = data['liked_by'];
+          var images = data['images'];
           newsData.add(
             new NewsData(
               author: UserData(userID: uid, city: city, name: Name(first: name, last: '')),
               body: data['body'],
+              imageURL: (images == null)? null : (images as Map).values.toList().cast<String>(),
               postID: id,
               publishTime: DateTime.fromMillisecondsSinceEpoch(data['timestamp']),
               likeCount: (liked_by != null) ? (liked_by as Map).keys.length : 0,

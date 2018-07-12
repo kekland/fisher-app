@@ -15,6 +15,7 @@ dependencies:
   image_picker:
   image_carousel:
   firebase_storage:
+  location:
 
 dev_dependencies:
   flutter_test:

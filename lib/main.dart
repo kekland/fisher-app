@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => HomePage(),
         '/registration': (context) => RegistrationPage(),
-        '/new_post': (context) => NewPostPage(),
+        '/new_post': (context) => NewCatchPage(),
       },
     );
   }

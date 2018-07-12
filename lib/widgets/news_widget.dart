@@ -85,7 +85,7 @@ class NewsWidget extends StatelessWidget {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: data.imageURL.map((String url) {
+              children: (data.imageURL == null)? [] : data.imageURL.map((String url) {
                 return InkWell(
                   onTap: () => openCarousel(context),
                   child: Padding(
