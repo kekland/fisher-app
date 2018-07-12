@@ -61,6 +61,9 @@ class _NewPostPageState extends State<NewPostPage> {
         Navigator.of(context).pop();
       }
     }
+    else {
+
+    }
   }
 
   List<File> images = [];
@@ -132,16 +135,19 @@ class _NewPostPageState extends State<NewPostPage> {
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: images.map((File image) {
-              return InkWell(
-                onTap: () => openCarousel(context),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                  child: Image.file(image, height: 200.0),
-                ),
-              );
-            }).toList(),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: images.map((File image) {
+                return InkWell(
+                  onTap: () => openCarousel(context),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                    child: Image.file(image, height: 200.0),
+                  ),
+                );
+              }).toList(),
+            ),
           ),
         ),
       ),

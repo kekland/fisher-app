@@ -11,16 +11,41 @@ class ImageCarouselPage extends StatefulWidget {
 }
 
 class _ImageCarouselPageState extends State<ImageCarouselPage> {
+  back(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.black,
-        child: ImageCarousel(
-          widget.images.map((File image) {
-            return Image.file(image);
-          }).toList().cast<ImageProvider>(),
-          allowZoom: true,
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Container(
+              color: Colors.black,
+              child: Center(
+                child: ImageCarousel(
+                  widget.images
+                      .map((File image) {
+                        return FileImage(image);
+                      })
+                      .toList()
+                      .cast<ImageProvider>(),
+                  canCloseZoomOnTap: true,
+                  fit: BoxFit.fitWidth,
+                  height: double.infinity,
+                ),
+              ),
+            ),
+            Align(
+              alignment: AlignmentDirectional.topStart,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => back(context),
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
       ),
     );
