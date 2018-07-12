@@ -12,6 +12,8 @@ dependencies:
   firebase_database:
   firebase_auth:
   shared_preferences:
+  image_picker:
+  image_carousel:
 
 dev_dependencies:
   flutter_test:

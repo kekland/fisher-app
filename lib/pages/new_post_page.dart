@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:fisher/pages/image_carousel_page.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +63,39 @@ class _NewPostPageState extends State<NewPostPage> {
     }
   }
 
+  List<File> images = [];
+  openCamera() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    if (image != null && mounted) {
+      setState(() {
+        images.add(image);
+      });
+    }
+  }
+
+  openGallery() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image != null && mounted) {
+      setState(() {
+        images.add(image);
+      });
+    }
+  }
+
+  openCarousel(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return ImageCarouselPage(
+            images: images,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +103,14 @@ class _NewPostPageState extends State<NewPostPage> {
       appBar: AppBar(
         title: Text('Add new post'),
         actions: [
+          IconButton(
+            icon: Icon(Icons.camera),
+            onPressed: (images.length < 3) ? openCamera : null,
+          ),
+          IconButton(
+            icon: Icon(Icons.image),
+            onPressed: (images.length < 3) ? openGallery : null,
+          ),
           IconButton(
             icon: Icon(Icons.send),
             onPressed: () => send(context),
@@ -75,16 +120,28 @@ class _NewPostPageState extends State<NewPostPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'What\'s new?',
-                  border: InputBorder.none,
+          child: TextField(
+            decoration: InputDecoration(
+              hintText: 'What\'s new?',
+              border: InputBorder.none,
+            ),
+            controller: bodyController,
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: images.map((File image) {
+              return InkWell(
+                onTap: () => openCarousel(context),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                  child: Image.file(image, height: 200.0),
                 ),
-                controller: bodyController,
-              ),
-            ],
+              );
+            }).toList(),
           ),
         ),
       ),
