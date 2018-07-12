@@ -1,6 +1,7 @@
 import 'package:fisher/classes/user_data.dart';
 import 'package:fisher/pages/home_page.dart';
 import 'package:fisher/pages/profile_page.dart';
+import 'package:fisher/pages/registration_page.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(new MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: new HomePage(),
+      home: new RegistrationPage(),
     );
   }
 }
