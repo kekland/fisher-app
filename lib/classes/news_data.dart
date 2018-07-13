@@ -11,6 +11,10 @@ class NewsData {
   bool liked;
   int likeCount;
 
+  double latitude;
+  double longitude;
+  String locationName;
+
   NewsData({
     this.author,
     this.postID,
@@ -19,5 +23,8 @@ class NewsData {
     this.publishTime,
     this.liked,
     this.likeCount,
+    this.latitude,
+    this.longitude,
+    this.locationName,
   });
 }

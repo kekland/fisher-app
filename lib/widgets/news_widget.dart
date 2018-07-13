@@ -3,6 +3,8 @@ import 'package:fisher/pages/image_carousel_page.dart';
 import 'package:fisher/pages/profile_page.dart';
 import 'package:fisher/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
+import 'package:geocoder/geocoder.dart';
 
 class NewsWidget extends StatelessWidget {
   final NewsData data;
@@ -10,7 +12,7 @@ class NewsWidget extends StatelessWidget {
   NewsWidget(this.data, this.onLikeTap);
 
   onProfileTap(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userData: data.author)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(uuid: data.author.userID)));
   }
 
   openCarousel(BuildContext context) {
@@ -27,54 +29,50 @@ class NewsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    /*return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.zero,
       ),
       margin: EdgeInsets.zero,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: () => onProfileTap(context),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    child: Text(data.author.name.first.toUpperCase()[0]),
-                  ),
-                  SizedBox(width: 16.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        data.author.name.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.teal,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      Text(
-                        Utils.dateTimeToString(data.publishTime.toLocal()),
-                        style: TextStyle(
-                          color: Colors.black38,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+          ListTile(
+            dense: true,
+            leading: InkWell(
+              onTap: () => onProfileTap(context),
+              child: CircleAvatar(
+                child: Text(data.author.name.first.toUpperCase()[0]),
               ),
             ),
+            title: Text(
+              data.author.name.toString(),
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.teal,
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+              ),
+            ),
+            subtitle: Text(
+              Utils.dateTimeToString(data.publishTime.toLocal()),
+              style: TextStyle(
+                color: Colors.black38,
+              ),
+            ),
+            trailing: IconButton(
+              icon: Icon(Icons.more_vert),
+              onPressed: () {},
+            ),
           ),
-          Divider(height: 1.0),
           InkWell(
             onTap: () => print('text full'),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: Text(
                 data.body,
+                textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 16.0,
@@ -82,21 +80,32 @@ class NewsWidget extends StatelessWidget {
               ),
             ),
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: (data.imageURL == null)? [] : data.imageURL.map((String url) {
-                return InkWell(
-                  onTap: () => openCarousel(context),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                    child: Image.network(url, height: 200.0),
-                  ),
-                );
-              }).toList(),
+          SizedBox(height: 16.0),
+          Padding(
+            padding: const EdgeInsets.left(8.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: (data.imageURL == null)
+                    ? []
+                    : data.imageURL.map((String url) {
+                        return InkWell(
+                          onTap: () => openCarousel(context),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                            child: Image.network(
+                              url,
+                              fit: BoxFit.cover,
+                              height: 200.0,
+                              width: 200.0,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+              ),
             ),
           ),
-          Divider(height: 1.0),
           InkWell(
             onTap: onLikeTap,
             highlightColor: (data.liked) ? null : Colors.red.withAlpha(50),
@@ -121,6 +130,96 @@ class NewsWidget extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ],
+      ),
+    );*/
+
+
+
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+      ),
+      margin: EdgeInsets.zero,
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () => openCarousel(context),
+            child: Stack(
+              children: <Widget>[
+                Image.network(
+                  data.imageURL[0],
+                  fit: BoxFit.cover,
+                  height: 200.0,
+                  width: double.infinity,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 200.0,
+                  padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.black.withAlpha(100), Colors.transparent],
+                      begin: AlignmentDirectional.bottomCenter,
+                      end: AlignmentDirectional.topCenter,
+                    ),
+                  ),
+                  alignment: AlignmentDirectional.bottomStart,
+                  child: Text(
+                    data.locationName,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0, bottom: 8.0),
+            child: Text(
+              data.body,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+          ListTile(
+            dense: true,
+            leading: InkWell(
+              onTap: () => onProfileTap(context),
+              child: CircleAvatar(
+                child: Text(data.author.name.first.toUpperCase()[0]),
+              ),
+            ),
+            title: Text(
+              data.author.name.toString(),
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.blue.shade700,
+                fontFamily: 'Futura',
+                fontSize: 16.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            subtitle: Text(
+              Utils.dateTimeToString(data.publishTime.toLocal()),
+            ),
+            trailing: (data.liked)
+                ? IconButton(
+                    icon: Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    ),
+                    onPressed: onLikeTap,
+                  )
+                : IconButton(
+                    icon: Icon(Icons.favorite_border),
+                    color: Colors.black54,
+                    onPressed: onLikeTap,
+                  ),
           ),
         ],
       ),

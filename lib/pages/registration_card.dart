@@ -3,12 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class RegistrationPage extends StatefulWidget {
+class RegistrationCard extends StatefulWidget {
   @override
-  _RegistrationPageState createState() => _RegistrationPageState();
+  _RegistrationCardState createState() => _RegistrationCardState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _RegistrationCardState extends State<RegistrationCard> {
   TextEditingController emailController;
   TextEditingController passwordController;
   TextEditingController nameController;
@@ -41,7 +41,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(width: 24.0),
-                  Text('Creating account for you'),
+                  Text('Creating account'),
                 ],
               ),
             );
@@ -67,7 +67,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         Navigator.of(context).pop();
         Navigator.of(context).pushReplacementNamed('/home');
       } catch (e) {
-        scaffold.currentState.showSnackBar(SnackBar(content: Text('Error occurred during registration'), duration: Duration(seconds: 2)));
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Error occurred during registration'), duration: Duration(seconds: 2)));
         Navigator.of(context).pop();
       }
     }
@@ -86,82 +86,65 @@ class _RegistrationPageState extends State<RegistrationPage> {
       checkLogin(context);
       checkedLogin = true;
     }
-    return Scaffold(
-      key: scaffold,
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.teal,
-              Colors.lightBlue,
-            ],
-            begin: AlignmentDirectional.topStart,
-            end: AlignmentDirectional.bottomEnd,
-          ),
-        ),
+    return Center(
+      child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Registration',
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 12.0),
-                    TextField(
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.email),
-                        labelText: 'E-Mail',
-                      ),
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    TextField(
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.lock),
-                        labelText: 'Password',
-                      ),
-                      controller: passwordController,
-                      obscureText: true,
-                    ),
-                    TextField(
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.account_circle),
-                        labelText: 'Name',
-                      ),
-                      controller: nameController,
-                    ),
-                    TextField(
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.location_city),
-                        labelText: 'City or country',
-                      ),
-                      controller: cityController,
-                    ),
-                    SizedBox(height: 24.0),
-                    SizedBox(
-                      width: double.infinity,
-                      child: RaisedButton.icon(
-                        color: Colors.lightGreen,
-                        textColor: Colors.white,
-                        onPressed: () => onRegisterTap(context),
-                        icon: Icon(Icons.chevron_right),
-                        label: Text('Register'),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
-                      ),
-                    ),
-                  ],
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Registration',
+                style: TextStyle(
+                  fontSize: 30.0,
+                  fontFamily: 'Futura',
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            ),
+              SizedBox(height: 12.0),
+              TextField(
+                decoration: InputDecoration(
+                  icon: Icon(Icons.email),
+                  labelText: 'E-Mail',
+                ),
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  icon: Icon(Icons.lock),
+                  labelText: 'Password',
+                ),
+                controller: passwordController,
+                obscureText: true,
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  icon: Icon(Icons.account_circle),
+                  labelText: 'Name',
+                ),
+                controller: nameController,
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  icon: Icon(Icons.location_city),
+                  labelText: 'City or country',
+                ),
+                controller: cityController,
+              ),
+              SizedBox(height: 24.0),
+              SizedBox(
+                width: double.infinity,
+                child: RaisedButton.icon(
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  onPressed: () => onRegisterTap(context),
+                  icon: Icon(Icons.chevron_right),
+                  label: Text('Register'),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+                ),
+              ),
+            ],
           ),
         ),
       ),

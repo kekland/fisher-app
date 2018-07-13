@@ -67,26 +67,26 @@ class _ImageCarouselPageNetworkState extends State<ImageCarouselNetworkPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Container(
-              color: Colors.black,
-              child: Center(
-                child: ImageCarousel(
-                  widget.urls
-                      .map((String url) {
-                        return NetworkImage(url);
-                      })
-                      .toList()
-                      .cast<ImageProvider>(),
-                  canCloseZoomOnTap: true,
-                  fit: BoxFit.fitWidth,
-                  height: double.infinity,
-                ),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            color: Colors.black,
+            child: Center(
+              child: ImageCarousel(
+                widget.urls
+                    .map((String url) {
+                      return NetworkImage(url);
+                    })
+                    .toList()
+                    .cast<ImageProvider>(),
+                canCloseZoomOnTap: true,
+                fit: BoxFit.fitWidth,
+                height: double.infinity,
               ),
             ),
-            Align(
+          ),
+          SafeArea(
+            child: Align(
               alignment: AlignmentDirectional.topStart,
               child: IconButton(
                 icon: Icon(Icons.arrow_back),
@@ -94,8 +94,8 @@ class _ImageCarouselPageNetworkState extends State<ImageCarouselNetworkPage> {
                 color: Colors.white,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

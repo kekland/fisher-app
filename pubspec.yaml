@@ -16,7 +16,13 @@ dependencies:
   image_carousel:
   firebase_storage:
   location:
-
+  map_view:
+    git:
+      url: https://github.com/kekland/flutter_google_map_view.git
+  xml:
+  geocoder:
+  transparent_image:
+  uuid: 1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -27,6 +33,32 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  fonts:
+    - family: GlacialIndifference
+      fonts:
+        - asset: assets/fonts/GlacialIndifference-Regular.otf
+    - family: Futura
+      fonts:
+        - asset: assets/fonts/Futura/FuturaPTBook.otf
+        - asset: assets/fonts/Futura/FuturaPTMedium.otf
+          weight: 500
+        - asset: assets/fonts/Futura/FuturaPTLight.otf
+          weight: 300
+        - asset: assets/fonts/Futura/FuturaPTDemi.otf
+          weight: 600
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans/OpenSans-Regular.ttf
+        - asset: assets/fonts/OpenSans/OpenSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/OpenSans/OpenSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/OpenSans/OpenSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/OpenSans/OpenSans-ExtraBold.ttf
+          weight: 800
+  assets:
+    - assets/nis_logo.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
